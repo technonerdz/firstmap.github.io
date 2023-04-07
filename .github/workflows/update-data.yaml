@@ -1,0 +1,61 @@
+name: Update Data
+
+on:
+  # Runs manually
+  workflow_dispatch:
+  
+    
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Chekout scraper repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'FIRSTMap/scraper'
+          path: 'scraper'
+
+      - name: Chekout AvatarGetter repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'FIRSTMap/AvatarGetter'
+          path: 'avatargetter'
+
+      - name: Set python version to 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install tbapy
+        working-directory: ./scraper
+        run: pip3 install tbapy
+
+      - name: Put TBA api key into scraper/tba_token.txt
+        run: echo ${{ secrets.TBA_TOKEN }} > scraper/tba_token.txt
+
+      - name: Run scraper
+        working-directory: ./scraper
+        run: python3 scraper.py
+      
+      - name: Copy scraped teams data to root
+        run: cp scraper/teams.json teams.json
+      
+      - name: Put FRC api key into avatargetter/FRC_API_KEY
+        run: echo ${{ secrets.FRC_API_KEY }} > avatargetter/FRC_API_KEY
+      
+      - name: Run AvatarGetter
+        working-directory: ./avatargetter
+        run: dotnet run
+      
+      - name: Copy avatars to root
+        uses: stefanzweifel/git-auto-commit-action@v4
+      
