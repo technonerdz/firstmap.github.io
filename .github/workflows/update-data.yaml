@@ -55,6 +55,9 @@ jobs:
       - name: Run AvatarGetter
         working-directory: ./avatargetter
         run: dotnet run
+
+      - name: Remove scraper and avatargetter directories
+        run: rm -rf scraper avatargetter
       
       - name: Copy avatars to root
         uses: stefanzweifel/git-auto-commit-action@v4
