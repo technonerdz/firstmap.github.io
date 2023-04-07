@@ -4,16 +4,10 @@ on:
   # Runs manually
   workflow_dispatch:
   
-    
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   # Build job
-  build:
+  run-scraper:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -59,10 +53,7 @@ jobs:
       
       - name: Run AvatarGetter
         working-directory: ./avatargetter
-        run: dotnet run
-
-      - name: Copy avatars to root
-        run: cp avatargetter/avatars.png avatargetter/avatars.json ./data/
+        run: dotnet run ../data
 
       - name: Remove scraper and avatargetter directories
         run: rm -rf scraper avatargetter
