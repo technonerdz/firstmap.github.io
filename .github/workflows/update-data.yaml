@@ -55,6 +55,9 @@ jobs:
         working-directory: ./avatargetter
         run: dotnet run ../data
 
+      - name: Copy avatars to root
+        run: cp avatargetter/avatars.png avatargetter/avatars.json ./data/
+
       - name: Remove scraper and avatargetter directories
         run: rm -rf scraper avatargetter
 
