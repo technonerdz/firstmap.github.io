@@ -34,6 +34,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      
+      - name: Set .NET core SDK version to 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
 
       - name: Install tbapy
         working-directory: ./scraper
@@ -47,7 +52,7 @@ jobs:
         run: python3 scraper.py
       
       - name: Copy scraped teams data to root
-        run: cp scraper/teams.json teams.json
+        run: cp scraper/teams.json ./data/
       
       - name: Put FRC api key into avatargetter/FRC_API_KEY
         run: echo ${{ secrets.FRC_API_KEY }} > avatargetter/FRC_API_KEY
@@ -56,9 +61,12 @@ jobs:
         working-directory: ./avatargetter
         run: dotnet run
 
+      - name: Copy avatars to root
+        run: cp avatargetter/avatars.png avatargetter/avatars.json ./data/
+
       - name: Remove scraper and avatargetter directories
         run: rm -rf scraper avatargetter
-      
-      - name: Copy avatars to root
+
+      - name: Commit to github
         uses: stefanzweifel/git-auto-commit-action@v4
       
