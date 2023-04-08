@@ -42,7 +42,7 @@ jobs:
         run: echo ${{ secrets.TBA_TOKEN }} > scraper/tba_token.txt
       
       - name: Set year to current year
-        run: echo "$(date +'%Y')" >> scraper/YEAR
+        run: echo "$(date +'%Y')" > scraper/YEAR
 
       - name: Run scraper
         working-directory: ./scraper
