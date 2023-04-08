@@ -48,6 +48,10 @@ jobs:
         working-directory: ./scraper
         run: python3 scraper.py
       
+      - name: Give permissions to ask_google
+        working-directory: ./scraper
+        run: chmod +x ask_google
+      
       - name: Try to run ask google script
         working-directory: ./scraper
         run: ./ask_google
