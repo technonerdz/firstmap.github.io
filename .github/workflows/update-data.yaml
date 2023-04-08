@@ -15,7 +15,7 @@ jobs:
       - name: Chekout scraper repo
         uses: actions/checkout@v2
         with:
-          repository: 'FIRSTMap/scraper'
+          repository: 'technonerdz/scraper-1'
           path: 'scraper'
 
       - name: Chekout AvatarGetter repo
@@ -40,11 +40,18 @@ jobs:
 
       - name: Put TBA api key into scraper/tba_token.txt
         run: echo ${{ secrets.TBA_TOKEN }} > scraper/tba_token.txt
+      
+      - name: Set year to current year
+        run: echo "$(date +'%Y')" >> scraper/YEAR
 
       - name: Run scraper
         working-directory: ./scraper
         run: python3 scraper.py
       
+      - name: Try to run ask google script
+        working-directory: ./scraper
+        run: ./ask_google
+
       - name: Copy scraped teams data to root
         run: cp scraper/teams.json ./data/
       
